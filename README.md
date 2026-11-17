@@ -32,17 +32,13 @@
 
 | Home (Sherwin) | About (Gerald) | Contact (Anthony) |
 |---|---|---|
-| ![Home](screenshots/home.png) | ![About](screenshots/about.png) | ![Contact](screenshots/contact.png) |
+| ![Home](docs/screenshots/01-home.png) | ![About](docs/screenshots/02-about.png) | ![Contact](docs/screenshots/05-contact.png) |
 
 ### More screenshots
 
-| Home | About | Salon |
+| Salon | Service detail | Booking |
 |---|---|---|
-| ![Home](docs/screenshots/01-home.png) | ![About](docs/screenshots/02-about.png) | ![Salon](docs/screenshots/03-salon.png) |
-
-| Service detail | Contact | Booking |
-|---|---|---|
-| ![Service detail](docs/screenshots/04-service-detail.png) | ![Contact](docs/screenshots/05-contact.png) | ![Booking](docs/screenshots/06-booking.png) |
+| ![Salon](docs/screenshots/03-salon.png) | ![Service detail](docs/screenshots/04-service-detail.png) | ![Booking](docs/screenshots/06-booking.png) |
 
 | Booking: sign in to continue | Theme switch (circular reveal) | Dark mode |
 |---|---|---|
@@ -59,8 +55,6 @@
 | Inquiries | Automation logs | Settings | Admin login |
 |---|---|---|---|
 | ![Inquiries](docs/screenshots/14-admin-inquiries.png) | ![Logs](docs/screenshots/15-admin-automation-logs.png) | ![Settings](docs/screenshots/16-admin-settings.png) | ![Admin login](docs/screenshots/17-admin-login.png) |
-
-> These screenshots were taken on a test setup without internet, so the new Unsplash photos do not appear in them (some older screenshots still show the previous images). Your local site shows the real photos. In the chatbot screenshot the reply came from the database fallback because n8n was not connected. Retake them on your own computer after setting up n8n, if you like.
 
 ---
 
