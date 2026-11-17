@@ -75,27 +75,41 @@
 
                 <form id="contactForm" action="{{ route('contact.store') }}" method="POST" novalidate>
                     @csrf
-                    <div class="field-row">
-                        <div class="field @error('name') has-error @enderror">
-                            <label for="name">Name</label>
-                            <input id="name" name="name" type="text" value="{{ old('name') }}" autocomplete="name" maxlength="255" aria-describedby="name-error">
-                            <span class="error-text" id="name-error" data-error-for="name">@error('name'){{ $message }}@enderror</span>
-                        </div>
-                        <div class="field @error('email') has-error @enderror">
-                            <label for="email">Email address</label>
-                            <input id="email" name="email" type="email" value="{{ old('email') }}" autocomplete="email" maxlength="255" aria-describedby="email-error">
-                            <span class="error-text" id="email-error" data-error-for="email">@error('email'){{ $message }}@enderror</span>
-                        </div>
-                    </div>
+                   <div class="field-row">
+    <div class="field @error('name') has-error @enderror">
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text"
+               value="{{ old('name') }}" autocomplete="name"
+               maxlength="255" aria-describedby="name-error" required>
+        <span class="error-text" id="name-error" data-error-for="name"
+              aria-live="polite" aria-atomic="true">@error('name'){{ $message }}@enderror</span>
+    </div>
+
+    <div class="field @error('email') has-error @enderror">
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email"
+               value="{{ old('email') }}" autocomplete="email"
+               maxlength="255" aria-describedby="email-error" required>
+        <span class="error-text" id="email-error" data-error-for="email"
+              aria-live="polite" aria-atomic="true">@error('email'){{ $message }}@enderror</span>
+    </div>
+</div>
+
                     <div class="field @error('subject') has-error @enderror">
                         <label for="subject">Subject</label>
-                        <input id="subject" name="subject" type="text" value="{{ old('subject') }}" maxlength="255" aria-describedby="subject-error">
-                        <span class="error-text" id="subject-error" data-error-for="subject">@error('subject'){{ $message }}@enderror</span>
+                        <input id="subject" name="subject" type="text"
+                            value="{{ old('subject') }}" maxlength="255"
+                            aria-describedby="subject-error" required>
+                        <span class="error-text" id="subject-error" data-error-for="subject"
+                            aria-live="polite" aria-atomic="true">@error('subject'){{ $message }}@enderror</span>
                     </div>
+
                     <div class="field @error('message') has-error @enderror">
                         <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="6" maxlength="5000" aria-describedby="message-error">{{ old('message') }}</textarea>
-                        <span class="error-text" id="message-error" data-error-for="message">@error('message'){{ $message }}@enderror</span>
+                        <textarea id="message" name="message" rows="6" maxlength="5000"
+                                aria-describedby="message-error" required>{{ old('message') }}</textarea>
+                        <span class="error-text" id="message-error" data-error-for="message"
+                            aria-live="polite" aria-atomic="true">@error('message'){{ $message }}@enderror</span>
                     </div>
                     {{-- Honeypot: hidden from people, bots tend to fill it in --}}
                     <div class="hp-field" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
