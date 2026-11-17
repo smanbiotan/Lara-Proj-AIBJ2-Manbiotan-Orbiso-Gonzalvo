@@ -23,7 +23,12 @@ Route::get('/about', [PageController::class, 'about'])->name('about');
 
 
 // Member 3 – Anthony Josh Orbiso: Contact page
-// (Member 3 adds the Contact page routes here)
+Route::get('/contact', [PageController::class, 'contact'])
+    ->name('contact');
+
+Route::post('/contact', [PageController::class, 'contactStore'])
+    ->middleware('throttle:6,1')
+    ->name('contact.store');
 
 // Salon service catalogue and service detail pages
 Route::get('/salon', [SalonController::class, 'index'])->name('salon.index');
