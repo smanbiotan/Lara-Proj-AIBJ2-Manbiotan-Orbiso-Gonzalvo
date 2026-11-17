@@ -1,0 +1,86 @@
+/* =========================================================================
+   HOME PAGE — Member 1: Sherwin Alvin Manbiotan
+   ========================================================================= */
+
+/* ---------- Hero slider ---------- */
+.hero { position: relative; min-height: min(88vh, 760px); display: flex; align-items: center; overflow: hidden; color: #fff; margin-top: calc(-1 * var(--header-h)); padding-top: var(--header-h); }
+.hero-slides { position: absolute; inset: 0; }
+.hero-slide {
+    position: absolute; inset: 0; background-size: cover; background-position: center;
+    opacity: 0; transform: scale(1.06); transition: opacity 1.4s var(--ease), transform 7s linear;
+}
+.hero-slide.is-active { opacity: 1; transform: scale(1); }
+.hero-overlay { position: absolute; inset: 0; background: linear-gradient(100deg, rgba(40, 32, 28, .78) 0%, rgba(40, 32, 28, .55) 45%, rgba(40, 32, 28, .2) 100%); }
+.hero-content { position: relative; z-index: 2; max-width: 1180px; padding-block: 60px 110px; }
+.hero-content h1 { max-width: 720px; color: #fff; text-shadow: 0 2px 20px rgba(0, 0, 0, .25); }
+.hero-content h1 em { color: #F2C9CC; }
+.hero-content p { max-width: 560px; font-size: 1.12rem; color: rgba(255, 255, 255, .92); }
+.hero-eyebrow { color: #E8D5B0; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
+
+.hero-indicators { position: absolute; z-index: 3; left: 50%; bottom: 36px; transform: translateX(-50%); display: flex; gap: 10px; }
+.hero-indicator { width: 44px; height: 18px; padding: 0; border: 0; background: transparent; cursor: pointer; display: flex; align-items: center; }
+.hero-indicator::before { content: ""; position: absolute; }
+.hero-indicator-fill { position: relative; display: block; width: 100%; height: 3px; border-radius: 3px; background: rgba(255, 255, 255, .38); overflow: hidden; }
+.hero-indicator-fill::after { content: ""; position: absolute; inset: 0; width: 0; background: #fff; border-radius: 3px; }
+.hero-indicator.is-active .hero-indicator-fill::after { animation: hero-progress var(--slide-duration, 6000ms) linear forwards; }
+.hero.is-paused .hero-indicator.is-active .hero-indicator-fill::after { animation-play-state: paused; }
+@keyframes hero-progress { from { width: 0; } to { width: 100%; } }
+
+/* ---------- Welcome ---------- */
+.welcome-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 80px); align-items: center; }
+.welcome-media { position: relative; padding: 0 12% 12% 0; }
+.welcome-media img { border-radius: var(--radius); box-shadow: var(--shadow-md); aspect-ratio: 1 / 1; object-fit: cover; width: 100%; }
+.welcome-media-small { position: absolute; right: 0; bottom: 0; width: 46% !important; border: 6px solid var(--bg); }
+.welcome p { color: var(--text-muted); }
+
+.center-action { text-align: center; margin-top: 44px; }
+
+/* ---------- Why choose ---------- */
+.why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+.why-card { padding: 30px 24px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); text-align: center; }
+.why-icon { display: inline-grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; background: color-mix(in srgb, var(--sage) 18%, transparent); color: var(--sage); font-size: 1.5rem; margin-bottom: 14px; }
+.why-card p { color: var(--text-muted); font-size: .95rem; margin: 0; }
+
+/* ---------- Steps ---------- */
+.steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; counter-reset: none; }
+.steps li { position: relative; padding: 28px 22px; background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); }
+.step-num { display: inline-grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: var(--accent-contrast); font-weight: 600; margin-bottom: 14px; }
+.steps p { color: var(--text-muted); font-size: .95rem; margin: 0; }
+
+/* ---------- Testimonials ---------- */
+.testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.testimonial { margin: 0; padding: 30px; border-radius: var(--radius); background: var(--surface-soft); border-left: 3px solid var(--gold); }
+.testimonial blockquote { margin: 0 0 14px; font-family: var(--font-display); font-size: 1.3rem; line-height: 1.45; font-style: italic; font-weight: 300; }
+.testimonial figcaption { display: flex; align-items: center; gap: 12px; font-size: .85rem; color: var(--text-muted); }
+.testimonial figcaption strong { display: block; color: var(--text); font-size: .95rem; font-weight: 600; }
+.testimonial figcaption small { display: block; font-size: .8rem; letter-spacing: .04em; }
+.testimonial-avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--accent-contrast); font-weight: 600; font-size: .85rem; letter-spacing: .04em; }
+.stars { display: flex; gap: 3px; color: #E0A93B; margin-bottom: 12px; }
+
+/* ---------- Contact strip ---------- */
+.contact-strip { display: grid; grid-template-columns: 1.1fr 1fr; gap: 50px; align-items: center; }
+.contact-facts { margin: 0; display: grid; gap: 14px; padding: 30px; background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); }
+.contact-facts div { display: grid; grid-template-columns: 90px 1fr; gap: 10px; }
+.contact-facts dt { font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; color: var(--sage); padding-top: 3px; }
+.contact-facts dd { margin: 0; }
+.contact-facts small { color: var(--text-muted); }
+
+@media (max-width: 980px) {
+    .welcome-grid, .contact-strip { grid-template-columns: 1fr; }
+    .why-grid, .steps { grid-template-columns: repeat(2, 1fr); }
+    .testimonial-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+    .why-grid, .steps { grid-template-columns: 1fr; }
+    .hero { min-height: 640px; }
+    .hero-overlay { background: linear-gradient(180deg, rgba(40, 32, 28, .55), rgba(40, 32, 28, .8)); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .hero-slide { transition: opacity .01ms; transform: none !important; }
+}
+
+/* Testimonial avatars: photo of the service the guest received */
+.testimonial-avatar { width: 48px; height: 48px; overflow: hidden; flex-shrink: 0; box-shadow: 0 0 0 3px var(--surface), 0 6px 14px rgba(58, 51, 46, .12); }
+.testimonial-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.testimonial-avatar.no-photo::after { content: attr(data-initials); }

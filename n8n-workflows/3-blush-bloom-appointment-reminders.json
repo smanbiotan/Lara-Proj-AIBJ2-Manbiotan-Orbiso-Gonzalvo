@@ -1,0 +1,239 @@
+{
+  "name": "Blush & Bloom Salon - 3. Appointment Reminders",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "9677ae38-34c1-48bd-9e2c-a90042d6ed1d",
+      "name": "Every Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/api/n8n/reminders/claim",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "8dcc015d-26cd-4f2b-a357-4c42617716ab",
+      "name": "Claim Upcoming Confirmed Appointments",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL",
+          "name": "Blush & Bloom - Laravel API Token"
+        }
+      },
+      "notes": "Laravel uses the 'Send reminders (hours before)' value from Admin → Settings. To override, send {\"hours_before\": 24}."
+    },
+    {
+      "parameters": {
+        "jsCode": "// One item per appointment that Laravel claimed for a reminder (already filtered: Confirmed, upcoming, not yet reminded).\nconst list = $input.first().json.appointments ?? [];\nreturn list.map((a) => ({ json: a }));"
+      },
+      "id": "5a3ad7d3-7c04-4340-9438-bff0b5a9c1d7",
+      "name": "Split Appointments",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        300
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst esc = (v) => String(v ?? '').replace(/[&<>\"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[c]));\nconst layout = (title, intro, rows, note, badgeColor, badge) => `<!DOCTYPE html><html><body style=\"margin:0;background:#F8F5EF;font-family:Arial,Helvetica,sans-serif;color:#3A332E\">\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#F8F5EF;padding:28px 12px\"><tr><td align=\"center\">\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"max-width:560px;background:#ffffff;border:1px solid #E3DACF;border-radius:16px;overflow:hidden\">\n<tr><td style=\"background:#BD7E83;padding:26px 30px;color:#ffffff\"><div style=\"font-family:Georgia,serif;font-size:24px;font-weight:bold\">Blush &amp; Bloom Salon</div><div style=\"font-size:11px;letter-spacing:3px;opacity:.9\">YOUR MOMENT TO BLOOM</div></td></tr>\n<tr><td style=\"padding:30px\">\n<span style=\"display:inline-block;padding:4px 12px;border-radius:999px;background:${badgeColor};color:#3A332E;font-size:12px;font-weight:bold\">${badge}</span>\n<h1 style=\"font-family:Georgia,serif;font-size:24px;margin:16px 0 8px\">${title}</h1>\n<p style=\"font-size:15px;line-height:1.6;color:#6E645C;margin:0 0 20px\">${intro}</p>\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#F8F5EF;border-radius:12px;padding:6px 16px\">${rows}</table>\n<p style=\"font-size:13px;line-height:1.6;color:#6E645C;margin:20px 0 0\">${note}</p>\n</td></tr>\n<tr><td style=\"padding:18px 30px;border-top:1px solid #E3DACF;font-size:12px;color:#89978B\">Blush &amp; Bloom Salon · This is an automated message about your appointment. Please do not reply directly to this email; use the Contact page on our website.</td></tr>\n</table></td></tr></table></body></html>`;\nconst row = (label, value) => `<tr><td style=\"padding:10px 0;font-size:12px;letter-spacing:1px;color:#89978B;text-transform:uppercase;width:40%\">${label}</td><td style=\"padding:10px 0;font-size:15px;font-weight:bold\">${esc(value)}</td></tr>`;\n\n// Reminder email for each claimed appointment.\nreturn $input.all().map((item) => {\n  const a = item.json;\n  const rows = row('Reference', a.reference) + row('Service', a.service) + row('Date', a.date_label) + row('Time', a.time_label);\n  return { json: {\n    event_id: a.event_id,\n    to: a.customer_email,\n    subject: `Reminder: your appointment on ${a.date_label} at ${a.time_label}`,\n    html: layout(`See you soon, ${esc(a.customer_name)}!`, 'This is a friendly reminder about your <strong>confirmed</strong> appointment at Blush &amp; Bloom Salon.', rows,\n      'Please arrive a few minutes early. If you can no longer make it, please contact us through our website as soon as possible.', '#E3ECE4', 'REMINDER'),\n  } };\n});"
+      },
+      "id": "e17e8a00-7299-4c00-a946-183b4585102c",
+      "name": "Build Reminder Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "Blush & Bloom Salon <REPLACE_WITH_YOUR_GMAIL@gmail.com>",
+        "toEmail": "={{ $json.to }}",
+        "subject": "={{ $json.subject }}",
+        "emailFormat": "html",
+        "html": "={{ $json.html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "5def60e4-70fd-4ea9-b016-549110dbd355",
+      "name": "Send Reminder Email (Gmail SMTP)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        880,
+        300
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL",
+          "name": "Gmail SMTP - Blush & Bloom"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/api/n8n/automation-results",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ event_id: $('Build Reminder Email').item.json.event_id, success: true, message: 'Reminder email sent by n8n (Gmail SMTP).' }) }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "6245088e-ce93-48cb-b09d-88f157ec0f9f",
+      "name": "Report Reminder Sent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        220
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL",
+          "name": "Blush & Bloom - Laravel API Token"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/api/n8n/automation-results",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ event_id: $('Build Reminder Email').item.json.event_id, success: false, message: String($json.error?.message ?? $json.error ?? 'Reminder sending failed').slice(0, 900) }) }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "08d20854-fada-4fa1-ba6e-987491e753e3",
+      "name": "Report Reminder Failed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        400
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL",
+          "name": "Blush & Bloom - Laravel API Token"
+        }
+      },
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Every Hour": {
+      "main": [
+        [
+          {
+            "node": "Claim Upcoming Confirmed Appointments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claim Upcoming Confirmed Appointments": {
+      "main": [
+        [
+          {
+            "node": "Split Appointments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Appointments": {
+      "main": [
+        [
+          {
+            "node": "Build Reminder Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Reminder Email": {
+      "main": [
+        [
+          {
+            "node": "Send Reminder Email (Gmail SMTP)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Reminder Email (Gmail SMTP)": {
+      "main": [
+        [
+          {
+            "node": "Report Reminder Sent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Report Reminder Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

@@ -21,6 +21,7 @@ Route::get('/', [PageController::class, 'home'])->name('home');
 // Member 2 – Gerald EJ Gonzalvo: About page
 Route::get('/about', [PageController::class, 'about'])->name('about');
 
+
 // Member 3 – Anthony Josh Orbiso: Contact page
 // (Member 3 adds the Contact page routes here)
 
