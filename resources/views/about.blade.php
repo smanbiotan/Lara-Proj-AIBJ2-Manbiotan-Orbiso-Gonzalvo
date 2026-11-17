@@ -39,4 +39,48 @@
         </div>
     </section>
 
+    {{-- COUNTERS (values come from the database / settings) --}}
+    <section class="counters" aria-label="Salon at a glance">
+        <div class="container counter-grid">
+            <div class="counter"><strong data-count-to="{{ $serviceCount }}">0</strong><span>Services offered</span></div>
+            <div class="counter"><strong data-count-to="5">0</strong><span>Service categories</span></div>
+            <div class="counter"><strong data-count-to="5">0</strong><span>Team specialties</span></div>
+            <div class="counter"><strong data-count-to="24" data-suffix="/7">0</strong><span>Online booking requests</span></div>
+        </div>
+    </section>
+
+    {{-- MISSION & VISION --}}
+    <section class="section">
+        <div class="container mv-grid">
+            <article class="mv-card">
+                <span class="mv-icon" aria-hidden="true">✿</span>
+                <span class="eyebrow">Our mission</span>
+                <h3>To help every guest feel refreshed, confident, and cared for.</h3>
+                <p>We provide thoughtful beauty and wellness services in a calm space, with honest pricing and attentive, personal care at every visit.</p>
+            </article>
+            <article class="mv-card">
+                <span class="mv-icon" aria-hidden="true">❀</span>
+                <span class="eyebrow">Our vision</span>
+                <h3>To be the neighbourhood salon people trust for their self-care moments.</h3>
+                <p>We want Blush &amp; Bloom to be known for warm hospitality, consistent quality, and a booking experience that is simple from start to finish.</p>
+            </article>
+        </div>
+    </section>
+
+    {{-- CORE VALUES --}}
+    <section class="section section-soft">
+        <div class="container">
+            <div class="section-heading">
+                <span class="eyebrow">What we value</span>
+                <h2>Our core values</h2>
+            </div>
+            <div class="values-grid">
+                <div class="value"><h3>Care</h3><p>We treat every guest with patience, kindness, and attention.</p></div>
+                <div class="value"><h3>Honesty</h3><p>Clear prices, realistic timings, and straightforward advice.</p></div>
+                <div class="value"><h3>Craft</h3><p>We take pride in neat, careful, and well-finished work.</p></div>
+                <div class="value"><h3>Calm</h3><p>An unhurried, relaxing atmosphere for every appointment.</p></div>
+            </div>
+        </div>
+    </section>
+
 @endsection
