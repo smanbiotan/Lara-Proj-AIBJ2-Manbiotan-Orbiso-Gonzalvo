@@ -1,0 +1,49 @@
+/* =========================================================================
+   CONTACT PAGE — Member 3: Anthony Josh Orbiso
+   ========================================================================= */
+.contact-section { padding-top: 40px; }
+.contact-grid { display: grid; grid-template-columns: 0.9fr 1.3fr; gap: 34px; align-items: start; }
+
+.contact-info { padding: 34px; border-radius: var(--radius); background: var(--surface-taupe); }
+.contact-info h2 { font-size: 1.9rem; }
+.contact-list { list-style: none; padding: 0; margin: 0 0 26px; display: grid; gap: 20px; }
+.contact-list li { display: flex; gap: 14px; align-items: flex-start; }
+.contact-list strong { display: block; font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); }
+.contact-list span { display: block; }
+.contact-icon { flex-shrink: 0; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background: var(--surface); color: var(--accent); font-size: 1.1rem; }
+.contact-note { padding: 20px; border-radius: var(--radius-sm); background: var(--surface); }
+.contact-note p { color: var(--text-muted); font-size: .92rem; margin: 4px 0 12px; }
+
+.contact-form-card { padding: clamp(26px, 4vw, 42px); border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+.contact-form-card h2 { margin-bottom: 4px; }
+.form-hint { color: var(--text-muted); font-size: .9rem; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field textarea { resize: vertical; min-height: 140px; }
+.contact-submit { width: 100%; margin-top: 6px; }
+.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.form-success {
+    display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; margin: 10px 0 20px; border-radius: var(--radius-sm);
+    background: #EEF2EE; border: 1px solid #C8D3C9; color: #3F5443; animation: contact-pop .4s var(--ease);
+}
+.form-success[hidden] { display: none; }
+.form-success p { margin: 2px 0 0; }
+.form-success-icon { width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center; background: var(--sage); color: #fff; font-weight: 600; }
+html[data-theme="dark"] .form-success { background: #263029; border-color: #3D4D40; color: #CFE0D2; }
+.form-alert { padding: 12px 16px; border-radius: var(--radius-sm); background: #F8ECEC; color: #7D3C42; border: 1px solid #E7C8CA; margin-bottom: 16px; }
+html[data-theme="dark"] .form-alert { background: #3A2628; color: #F2CDD0; border-color: #5C3A3E; }
+.form-alert[hidden] { display: none; }
+@keyframes contact-pop { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .field-row { grid-template-columns: 1fr; gap: 0; } }
+
+/* Contact icons: centered line icons with a soft tinted circle (readable in light and dark) */
+.contact-icon { background: color-mix(in srgb, var(--accent) 16%, var(--surface)); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent); }
+.contact-icon svg { display: block; }
+.contact-list li > div { padding-top: 1px; min-width: 0; }
+.contact-list li span { overflow-wrap: anywhere; }
+html[data-theme="dark"] .contact-info { border: 1px solid var(--border); }
+/* The generic ".contact-list span" rule was overriding the icon's centering */
+.contact-list .contact-icon { display: grid; place-items: center; }
+.contact-list li { align-items: center; }
