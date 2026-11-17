@@ -83,4 +83,53 @@
         </div>
     </section>
 
+    {{-- TEAM --}}
+    <section class="section">
+        <div class="container">
+            <div class="section-heading">
+                <span class="eyebrow">Meet the team</span>
+                <h2>The people behind your <em>glow</em></h2>
+                <p class="sample-note">Sample staff profiles for this fictional salon. Photos are stock images of models.</p>
+            </div>
+            @php
+                $team = [
+                    ['name' => 'Bianca Reyes', 'photo' => 'images/team/bianca.jpg', 'role' => 'Lead Hair Stylist', 'tone' => 'rose', 'short' => 'Specialises in precision cuts and soft, natural styling.', 'more' => 'Bianca loves helping guests find a cut that fits their routine. She focuses on shape, texture, and easy at-home styling tips.'],
+                    ['name' => 'Camille Santos', 'photo' => 'images/team/camille.jpg', 'role' => 'Nail Technician', 'tone' => 'sage', 'short' => 'Known for neat shaping and clean, glossy finishes.', 'more' => 'Camille pays close attention to cuticle care and polish detail, and enjoys recommending shades that suit each guest.'],
+                    ['name' => 'Dana Villanueva', 'photo' => 'images/team/dana.jpg', 'role' => 'Esthetician', 'tone' => 'gold', 'short' => 'Leads our calm, relaxing facial experiences.', 'more' => 'Dana creates a soothing space for every facial and always checks skin preferences and sensitivities before starting.'],
+                    ['name' => 'Elena Cruz', 'photo' => 'images/team/elena.jpg', 'role' => 'Massage Therapist', 'tone' => 'taupe', 'short' => 'Focuses on comfort-first, relaxing massage sessions.', 'more' => 'Elena adjusts pressure throughout each session and makes sure guests feel comfortable and at ease from start to finish.'],
+                    ['name' => 'Francesca Lim', 'photo' => 'images/team/francesca.jpg', 'role' => 'Makeup Artist', 'tone' => 'rose', 'short' => 'Creates looks from fresh and natural to evening glam.', 'more' => 'Francesca builds each look around the occasion and the guest’s features, with careful blending for a long-lasting finish.'],
+                ];
+            @endphp
+            <div class="team-grid">
+                @foreach($team as $i => $member)
+                    <article class="team-card">
+                        @php $photo = \App\Support\SalonImages::url($member['photo'], 320, 320); @endphp
+                        <div class="team-avatar team-avatar-{{ $member['tone'] }}" data-initials="{{ collect(explode(' ', $member['name']))->map(fn ($p) => $p[0])->implode('') }}">
+                            @if($photo)
+                                <img src="{{ $photo }}" alt="Portrait of {{ $member['name'] }}, {{ $member['role'] }}" loading="lazy" width="112" height="112"
+                                     onerror="this.parentElement.classList.add('no-photo'); this.remove();">
+                            @endif
+                        </div>
+                        <h3>{{ $member['name'] }}</h3>
+                        <span class="team-role">{{ $member['role'] }}</span>
+                        <p>{{ $member['short'] }}</p>
+                        <div class="read-more" id="team-more-{{ $i }}" data-read-more><p>{{ $member['more'] }}</p></div>
+                        <button class="read-more-toggle" type="button" aria-expanded="false" aria-controls="team-more-{{ $i }}" data-read-more-toggle>
+                            <span data-label>Read More</span> <span aria-hidden="true" class="chevron">⌄</span>
+                        </button>
+                    </article>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <section class="about-cta">
+        <div class="container">
+            <h2>Ready for your moment to bloom?</h2>
+            <div class="about-cta-actions">
+                <a class="btn btn-light" href="{{ route('booking') }}">Book an appointment</a>
+                <a class="btn btn-ghost-light" href="{{ route('salon.index') }}">Explore services</a>
+            </div>
+        </div>
+    </section>
 @endsection
