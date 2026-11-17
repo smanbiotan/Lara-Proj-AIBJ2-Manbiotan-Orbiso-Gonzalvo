@@ -1,0 +1,67 @@
+/* =========================================================================
+   ABOUT PAGE — Member 2: Gerald EJ Gonzalvo
+   ========================================================================= */
+.about-story { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(36px, 6vw, 80px); align-items: center; }
+.about-story-media img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 200px 200px var(--radius) var(--radius); box-shadow: var(--shadow-md); }
+.about-story p { color: var(--text-muted); }
+
+/* Read More / Read Less */
+.read-more { overflow: hidden; max-height: 0; opacity: 0; transition: max-height .5s var(--ease), opacity .4s var(--ease); }
+.read-more.is-open { opacity: 1; }
+.read-more-toggle {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; padding: 8px 0; border: 0; background: none; cursor: pointer;
+    color: var(--accent); font: 600 .92rem var(--font-body); letter-spacing: .04em; border-bottom: 1px solid currentColor;
+}
+.read-more-toggle .chevron { display: inline-block; transition: transform .3s var(--ease); }
+.read-more-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+
+/* Counters */
+.counters { background: var(--sage); color: #fff; padding: 46px 0; }
+html[data-theme="dark"] .counters { background: #4C5A4F; }
+.counter-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center; }
+.counter strong { display: block; font-family: var(--font-display); font-size: clamp(2.4rem, 4vw, 3.4rem); line-height: 1; font-weight: 350; }
+.counter span { font-size: .85rem; letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
+
+/* Mission & vision */
+.mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+.mv-card { padding: clamp(28px, 4vw, 44px); border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+.mv-card h3 { font-size: 1.7rem; }
+.mv-card p { color: var(--text-muted); margin: 0; }
+.mv-icon { display: block; font-size: 1.8rem; color: var(--gold); margin-bottom: 8px; }
+
+/* Values */
+.values-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.value { padding: 26px; border-top: 2px solid var(--gold); background: var(--surface); border-radius: 0 0 var(--radius-sm) var(--radius-sm); }
+.value p { color: var(--text-muted); margin: 0; font-size: .95rem; }
+
+/* Team profile cards */
+.team-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+.team-card { text-align: center; padding: 28px 18px 22px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); transition: transform .3s var(--ease), box-shadow .3s var(--ease); }
+.team-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.team-card h3 { font-size: 1.35rem; margin-bottom: 2px; }
+.team-card p { color: var(--text-muted); font-size: .9rem; margin: 10px 0 0; }
+.team-role { display: block; font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--sage); }
+.team-avatar { width: 96px; height: 96px; margin: 0 auto 16px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-display); font-size: 2rem; color: #fff; font-weight: 400; }
+.team-avatar-rose { background: linear-gradient(135deg, #CF9A9E, var(--rose)); }
+.team-avatar-sage { background: linear-gradient(135deg, #A6B2A7, var(--sage)); }
+.team-avatar-gold { background: linear-gradient(135deg, #CDB687, var(--gold)); }
+.team-avatar-taupe { background: linear-gradient(135deg, #BFAE9C, var(--taupe)); }
+
+/* CTA */
+.about-cta { background: linear-gradient(120deg, var(--rose), #A88A7C); color: #fff; text-align: center; padding: 70px 0; }
+.about-cta h2 { color: #fff; }
+.about-cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+
+@media (max-width: 1100px) { .team-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 860px) {
+    .about-story, .mv-grid { grid-template-columns: 1fr; }
+    .values-grid, .counter-grid { grid-template-columns: repeat(2, 1fr); }
+    .team-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) { .team-grid, .values-grid { grid-template-columns: 1fr; } }
+
+/* Team portraits */
+.team-avatar { position: relative; width: 112px; height: 112px; overflow: hidden; box-shadow: 0 0 0 4px var(--surface), 0 0 0 5px var(--border), 0 12px 26px rgba(58, 51, 46, .14); }
+.team-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; transition: transform .5s var(--ease); }
+.team-card:hover .team-avatar img { transform: scale(1.06); }
+.team-avatar.no-photo::after, .team-avatar:not(:has(img))::after { content: attr(data-initials); }
