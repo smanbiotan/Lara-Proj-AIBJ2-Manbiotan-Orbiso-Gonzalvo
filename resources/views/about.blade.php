@@ -7,6 +7,9 @@
 
 @section('title', 'About')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/about.css') }}">
+@endpush
 
 @section('content')
     <section class="page-hero">
