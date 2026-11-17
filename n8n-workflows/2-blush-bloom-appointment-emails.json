@@ -1,0 +1,223 @@
+{
+  "name": "Blush & Bloom Salon - 2. Appointment Email Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "blush-bloom-appointments",
+        "authentication": "headerAuth",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "044ecd3f-a913-4e10-879a-49a7cdf60ecd",
+      "name": "Laravel Appointment Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "webhookId": "1073df2a-d501-44e4-afeb-a01d18d31b2a",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL",
+          "name": "Blush & Bloom - Webhook Secret"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst esc = (v) => String(v ?? '').replace(/[&<>\"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[c]));\nconst layout = (title, intro, rows, note, badgeColor, badge) => `<!DOCTYPE html><html><body style=\"margin:0;background:#F8F5EF;font-family:Arial,Helvetica,sans-serif;color:#3A332E\">\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#F8F5EF;padding:28px 12px\"><tr><td align=\"center\">\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"max-width:560px;background:#ffffff;border:1px solid #E3DACF;border-radius:16px;overflow:hidden\">\n<tr><td style=\"background:#BD7E83;padding:26px 30px;color:#ffffff\"><div style=\"font-family:Georgia,serif;font-size:24px;font-weight:bold\">Blush &amp; Bloom Salon</div><div style=\"font-size:11px;letter-spacing:3px;opacity:.9\">YOUR MOMENT TO BLOOM</div></td></tr>\n<tr><td style=\"padding:30px\">\n<span style=\"display:inline-block;padding:4px 12px;border-radius:999px;background:${badgeColor};color:#3A332E;font-size:12px;font-weight:bold\">${badge}</span>\n<h1 style=\"font-family:Georgia,serif;font-size:24px;margin:16px 0 8px\">${title}</h1>\n<p style=\"font-size:15px;line-height:1.6;color:#6E645C;margin:0 0 20px\">${intro}</p>\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#F8F5EF;border-radius:12px;padding:6px 16px\">${rows}</table>\n<p style=\"font-size:13px;line-height:1.6;color:#6E645C;margin:20px 0 0\">${note}</p>\n</td></tr>\n<tr><td style=\"padding:18px 30px;border-top:1px solid #E3DACF;font-size:12px;color:#89978B\">Blush &amp; Bloom Salon · This is an automated message about your appointment. Please do not reply directly to this email; use the Contact page on our website.</td></tr>\n</table></td></tr></table></body></html>`;\nconst row = (label, value) => `<tr><td style=\"padding:10px 0;font-size:12px;letter-spacing:1px;color:#89978B;text-transform:uppercase;width:40%\">${label}</td><td style=\"padding:10px 0;font-size:15px;font-weight:bold\">${esc(value)}</td></tr>`;\n\n// Build the right email for the appointment event sent by Laravel.\nconst p = $input.first().json.body ?? {};\nconst a = p.appointment ?? {};\nif (!p.event_id || !a.reference || !a.customer_email) throw new Error('Invalid appointment event payload');\n\nconst rows = row('Reference', a.reference) + row('Service', a.service) + row('Date', a.date_label) + row('Time', a.time_label) + (a.price ? row('Starting price', a.price) : '');\nlet email = null;\n\nif (p.event === 'appointment.created') {\n  email = { subject: `We received your booking request – ${a.reference}`,\n    html: layout(`Thank you, ${esc(a.customer_name)}!`, 'We have received your appointment request. <strong>Your booking is PENDING and is not yet confirmed.</strong> Our team will review it and email you once it is confirmed.', rows,\n      'Keep your booking reference. You can use it with your email to check your status through our website assistant.', '#F4EBDA', 'PENDING') };\n} else if (p.event === 'appointment.status_changed' && a.status === 'Confirmed') {\n  email = { subject: `Your appointment is confirmed – ${a.reference}`,\n    html: layout(`See you soon, ${esc(a.customer_name)}!`, 'Good news — your appointment at Blush &amp; Bloom Salon is <strong>CONFIRMED</strong>.', rows,\n      'Please arrive a few minutes early. If you need to change your appointment, contact us through our website.', '#E3ECE4', 'CONFIRMED') };\n} else if (p.event === 'appointment.status_changed' && (a.status === 'Cancelled' || a.status === 'Rejected')) {\n  const word = a.status === 'Rejected' ? 'could not be accepted' : 'has been cancelled';\n  email = { subject: `Update on your appointment – ${a.reference}`,\n    html: layout(`Hello ${esc(a.customer_name)},`, `We are sorry — your appointment request <strong>${word}</strong>.`, rows,\n      'You are welcome to book another time on our website, or contact us if you have any questions.', '#F5E3E4', a.status.toUpperCase()) };\n}\n\n// Other events (e.g. Completed, Pending again, rescheduled) do not send an email in this workflow.\nreturn [{ json: { send: !!email, event_id: p.event_id, to: a.customer_email, subject: email?.subject ?? '', html: email?.html ?? '' } }];"
+      },
+      "id": "7766bdef-bc57-49f7-9c37-b437e2b1afc2",
+      "name": "Build Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "072fc09f-6168-4cea-abdb-23add74aad42",
+              "leftValue": "={{ $json.send }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "1e01cd78-2702-42cf-8547-8dd59dd2b0dc",
+      "name": "Should Send?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "Blush & Bloom Salon <REPLACE_WITH_YOUR_GMAIL@gmail.com>",
+        "toEmail": "={{ $json.to }}",
+        "subject": "={{ $json.subject }}",
+        "emailFormat": "html",
+        "html": "={{ $json.html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "0faee06a-daac-4a5e-b343-40ece966df5b",
+      "name": "Send Email (Gmail SMTP)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        680,
+        220
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL",
+          "name": "Gmail SMTP - Blush & Bloom"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/api/n8n/automation-results",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ event_id: $('Build Email').item.json.event_id, success: true, message: 'Email sent to customer by n8n (Gmail SMTP).' }) }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "c16b4536-0fa5-4f2f-af29-e0118128a3d5",
+      "name": "Report Success to Laravel",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        940,
+        140
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL",
+          "name": "Blush & Bloom - Laravel API Token"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/api/n8n/automation-results",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ event_id: $('Build Email').item.json.event_id, success: false, message: String($json.error?.message ?? $json.error ?? 'Email sending failed').slice(0, 900) }) }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "151dc1da-c17a-4feb-b033-afe89cca9ab1",
+      "name": "Report Failure to Laravel",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        940,
+        320
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL",
+          "name": "Blush & Bloom - Laravel API Token"
+        }
+      },
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Laravel Appointment Webhook": {
+      "main": [
+        [
+          {
+            "node": "Build Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Email": {
+      "main": [
+        [
+          {
+            "node": "Should Send?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Should Send?": {
+      "main": [
+        [
+          {
+            "node": "Send Email (Gmail SMTP)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Send Email (Gmail SMTP)": {
+      "main": [
+        [
+          {
+            "node": "Report Success to Laravel",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Report Failure to Laravel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}
