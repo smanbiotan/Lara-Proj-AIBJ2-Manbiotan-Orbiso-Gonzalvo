@@ -34,7 +34,7 @@
 
 | Service detail | Contact | Booking |
 |---|---|---|
-| ![Service detail](docs/screenshots/04-service-detail.png) | ![Contact details](docs/screenshots/contact-top.png) | ![Contact form](docs/screenshots/contact-form.png) | ![Contact bottom](docs/screenshots/contact-bottom.png) | ![Validation errors](docs/screenshots/contact-validation.png) | ![Booking](docs/screenshots/06-booking.png) |
+| ![Service detail](docs/screenshots/04-service-detail.png) | ![Contact](docs/screenshots/05-contact.png) | ![Booking](docs/screenshots/06-booking.png) |
 
 | Booking: sign in to continue | Theme switch (circular reveal) | Dark mode |
 |---|---|---|
