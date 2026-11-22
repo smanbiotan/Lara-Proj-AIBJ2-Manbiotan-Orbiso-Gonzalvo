@@ -128,7 +128,7 @@
 
     <section class="about-cta">
         <div class="container">
-            <h2>Ready for your moment to bloom?</h2>
+            <h2>Ready to bloom in style?</h2>
             <div class="about-cta-actions">
                 <a class="btn btn-light" href="{{ route('booking') }}">Book an appointment</a>
                 <a class="btn btn-ghost-light" href="{{ route('salon.index') }}">Explore services</a>
