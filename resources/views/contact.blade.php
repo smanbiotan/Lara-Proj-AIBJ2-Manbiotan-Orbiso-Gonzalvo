@@ -64,7 +64,7 @@
 
             {{-- Contact form --}}
             <div class="contact-form-card">
-                <h2>Send us a message</h2>
+                <h2>Drop a message</h2>
                 <p class="form-hint">All fields are required.</p>
 
                 <div class="form-success" id="contactSuccess" role="status" tabindex="-1" @if(!session('success')) hidden @endif>

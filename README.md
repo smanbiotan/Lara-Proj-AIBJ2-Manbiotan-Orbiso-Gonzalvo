@@ -1,6 +1,6 @@
 # Blush & Bloom Salon
 
-**Beauty Salon and Wellness Management Platform** — a multi-page Laravel web application with a customer website, a separate administrator portal, and AI automation through **n8n + Google Gemini**.
+**Beauty Salon and Wellness Management Platform** — a multi-page Laravel web application with a customer website, a separate administrator portal, and AI automation through **n8n + OpenAI**.
 
 > Blush & Bloom Salon is a fictional business created for a school project. Prices, staff profiles and testimonials are demonstration content.
 
@@ -8,10 +8,10 @@
 |---|---|
 | **Project** | Lara-Proj-AIBJ2-Manbiotan-Orbiso-Gonzalvo |
 | **Section** | AIBJ2 |
-| **Group name** | _(add your group name here)_ |
+| **Group name** | Three Heads, One Repo |
 | **Theme** | Local business: a beauty and wellness salon |
 | **Live site** | https://blush-and-bloom-salon.vercel.app |
-| **Stack** | Laravel 12 · PHP 8.2+ · MySQL (XAMPP, local) / PostgreSQL (Supabase, live) · Blade · HTML/CSS/JavaScript · n8n · Google Gemini · Vercel |
+| **Stack** | Laravel 12 · PHP 8.2+ · MySQL (XAMPP, local) / PostgreSQL (Supabase, live) · Blade · HTML/CSS/JavaScript · n8n · OpenAI · Vercel |
 | **Database** | `blush_bloom_salon` |
 
 ---
@@ -28,13 +28,17 @@
 
 ## 2. Screenshots
 
-| Home | About | Salon |
-|---|---|---|
-| ![Home](docs/screenshots/01-home.png) | ![About](docs/screenshots/02-about.png) | ![Salon](docs/screenshots/03-salon.png) |
+### Required pages (one per member)
 
-| Service detail | Contact | Booking |
+| Home (Sherwin) | About (Gerald) | Contact (Anthony) |
 |---|---|---|
-| ![Service detail](docs/screenshots/04-service-detail.png) | ![Contact](docs/screenshots/05-contact.png) | ![Booking](docs/screenshots/06-booking.png) |
+| ![Home](docs/screenshots/01-home.png) | ![About](docs/screenshots/02-about.png) | ![Contact](docs/screenshots/05-contact.png) |
+
+### More screenshots
+
+| Salon | Service detail | Booking |
+|---|---|---|
+| ![Salon](docs/screenshots/03-salon.png) | ![Service detail](docs/screenshots/04-service-detail.png) | ![Booking](docs/screenshots/06-booking.png) |
 
 | Booking: sign in to continue | Theme switch (circular reveal) | Dark mode |
 |---|---|---|
@@ -51,8 +55,6 @@
 | Inquiries | Automation logs | Settings | Admin login |
 |---|---|---|---|
 | ![Inquiries](docs/screenshots/14-admin-inquiries.png) | ![Logs](docs/screenshots/15-admin-automation-logs.png) | ![Settings](docs/screenshots/16-admin-settings.png) | ![Admin login](docs/screenshots/17-admin-login.png) |
-
-> These screenshots were taken on a test setup without internet, so the new Unsplash photos do not appear in them (some older screenshots still show the previous images). Your local site shows the real photos. In the chatbot screenshot the reply came from the database fallback because n8n was not connected. Retake them on your own computer after setting up n8n, if you like.
 
 ---
 
@@ -189,19 +191,19 @@ Until these are set, the Google button is shown greyed out and customers can sti
 ### Photo credits
 Default service photos are free photos from [Unsplash](https://unsplash.com) (Unsplash License) by Hair Spies, Lindsay Cash, Adam Winger, Lera Kogan, Benyamin Bohlouli, Giorgio Trovato, Rosa Rafael, kimia kazemi, engin akyurt, Toa Heftiba, Taylor Heery, Lola Azizada and Alena Plotnikova. Photos uploaded in the Admin Portal always take priority.
 
-## 8. n8n + Gemini + Gmail setup
+## 8. n8n + OpenAI + Gmail setup
 
 Full step-by-step guide: **[docs/N8N-SETUP.md](docs/N8N-SETUP.md)**. Summary:
 
 | Workflow file | Purpose | Trigger |
 |---|---|---|
-| `n8n-workflows/1-blush-bloom-ai-customer-assistant.json` | Gemini AI agent with Laravel tools: services, business info, availability, create booking, booking status, escalate to a person | Webhook `POST /webhook/blush-bloom-chat` |
+| `n8n-workflows/1-blush-bloom-ai-customer-assistant.json` | OpenAI AI agent with Laravel tools: services, business info, availability, create booking, booking status, escalate to a person | Webhook `POST /webhook/blush-bloom-chat` |
 | `n8n-workflows/2-blush-bloom-appointment-emails.json` | Emails for booking received (Pending), confirmed, cancelled, rejected | Webhook `POST /webhook/blush-bloom-appointments` |
 | `n8n-workflows/3-blush-bloom-appointment-reminders.json` | Reminder emails for upcoming confirmed appointments | Schedule (every hour) |
 
 The AI never touches MySQL directly. It can only call the narrow `/api/n8n/*` endpoints, which are protected by `N8N_API_TOKEN`. Every booking goes through the same Laravel validation as the website form.
 
-**Status of the integrations:** the Laravel side is covered by automated tests, with n8n simulated. The three workflows are provided as importable files. They become operational only after **you** add your own Gemini key, Gmail app password and secrets, and then test them. Until then the website keeps working: bookings save normally, the chatbot uses database answers, and the Automation Logs show `Skipped`.
+**Status of the integrations:** the Laravel side is covered by automated tests, with n8n simulated. The three workflows are provided as importable files. They become operational only after **you** connect your own OpenAI credential, Gmail account and secrets, and then test them. Until then the website keeps working: bookings save normally, the chatbot uses database answers, and the Automation Logs show `Skipped`.
 
 ## 9. API reference
 
@@ -253,7 +255,7 @@ tests/Feature/SalonTest.php
 - Passwords are hashed with bcrypt. Customer and admin logins use separate guards and are rate-limited.
 - CSRF protection on all web forms. API inputs are validated. Eloquent prevents SQL injection, and Blade escapes output (XSS).
 - Uploads: images only, at most 3 MB, stored under random file names in `public/uploads/services`.
-- n8n credentials, the Gemini key and the SMTP password live only in n8n. Laravel secrets live only in `.env`. Nothing secret is sent to the browser.
+- n8n credentials, the OpenAI key and the Gmail login live only in n8n. Laravel secrets live only in `.env`. Nothing secret is sent to the browser.
 - Before going live: set `APP_ENV=production`, `APP_DEBUG=false`, use HTTPS, and change every placeholder secret.
 
 ## 12. Deployment

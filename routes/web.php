@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PageController::class, 'home'])->name('home');
 
 // Member 2 – Gerald EJ Gonzalvo: About page
-// (Member 2 adds the About page route here)
+Route::get('/about', [PageController::class, 'about'])->name('about');
+
 
 // Member 3 – Anthony Josh Orbiso: Contact page
 Route::get('/contact', [PageController::class, 'contact'])
