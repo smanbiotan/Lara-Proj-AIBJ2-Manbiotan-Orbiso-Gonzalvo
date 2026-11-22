@@ -24,7 +24,7 @@
     @endphp
 
     {{-- HERO SLIDER --}}
-    <section class="hero" id="heroSlider" aria-roledescription="carousel" aria-label="Blush & Bloom Salon highlights" data-interval="6000">
+    <section class="hero" id="heroSlider" aria-roledescription="carousel" aria-label="Blush & Bloom Salon highlights" data-interval="3000">
         <div class="hero-slides">
             @foreach($slides as $i => $slide)
                 <div class="hero-slide {{ $i === 0 ? 'is-active' : '' }}" role="group" aria-roledescription="slide" aria-label="{{ $i + 1 }} of {{ count($slides) }}: {{ $slide['label'] }}" aria-hidden="{{ $i === 0 ? 'false' : 'true' }}"
